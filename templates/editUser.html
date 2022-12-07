@@ -1,0 +1,64 @@
+{% extends 'index.html' %}
+
+{% block links %}
+    <li class="nav-item">
+        <a class="nav-link" href="/search">New Search</a> <link rel="stylesheet" href="">
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/userProfile">Edit Profile</a> <link rel="stylesheet" href="">
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/logout">Logout</a> <link rel="stylesheet" href="">
+    </li>
+{% endblock %}
+
+{% block content %}
+
+<form action="" method="post">
+    <h4>Edit user profile:</h4> 
+    {{form.hidden_tag()}}
+
+    {% for field in form if field.widget.input_type != 'hidden' %}
+        <div class=" mb-3">
+            {{field.label(class_="col-3 col-form-label")}}
+            <div class="col-8">
+                {% if field.label.text != 'State of Residency:'%}
+                    {{field(class_="form-control")}}
+
+                {% elif field.label.text == 'State of Residency:'%}
+                    {{field(list=field.name + "-list",class_="form-control")}}
+                    <datalist id="{{field.name}}-list">
+                        {% for state in states %}
+                            <option value="{{state.name}}">
+                        {% endfor %}
+                    </datalist>
+                {% endif %}
+            </div>
+        </div>
+
+        {% for error in field.errors %}
+            {{error}}
+        {% endfor %}
+    {% endfor %}
+    
+
+    <div>
+        <button class="btn btn-primary">Update Profile</button>
+    </div>
+    <!-- <label for="username">Username:</label>
+    <input name="username" placeholder="Enter username" type="text">
+    <label for="password">Password:</label>
+    <input name="password" type="password" placeholder="Enter password"> -->
+</form>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for category, message in messages %}
+      <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+{% endblock %}

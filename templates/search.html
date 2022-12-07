@@ -1,0 +1,109 @@
+{% extends 'index.html' %}
+
+{% block links %}
+    <li class="nav-item">
+        <a class="nav-link" href="/search">New Search</a> <link rel="stylesheet" href="">
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/userProfile">Edit Profile</a> <link rel="stylesheet" href="">
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/logout">Logout</a> <link rel="stylesheet" href="">
+    </li>
+{% endblock %}
+
+{% block content %}
+
+
+
+<form action="/search" method="post">
+    <h1>Start new search:</h1>
+    {{form.hidden_tag()}}
+
+    {% for field in form if field.widget.input_type != 'hidden' %}
+        {% if field.label.text == "Major:" %}
+            <h3>Step 1: Select school and major</h3>
+            <div class="mb-3">
+                {{field.label(class_="col-1 form-label")}}
+                <div class="col-8">
+                    {{field(list=field.name + "-list", class_="form-control")}}
+                    <datalist id="{{field.name}}-list">
+                        {% for major in majors %}
+                            <option value="{{major.title}}">
+                        {% endfor %}
+                    </datalist>
+                </div>
+    
+            </div>
+            <p>
+                {% for error in field.errors %}
+                    {{error}}
+                {% endfor %}
+            </p>
+
+        {% elif field.label.text == "College:" %}
+
+            <div class="mb-3">
+                {{field.label(class_="col-1 form-label")}}
+                <div class="col-8">
+                    {{field(list=field.name + "-list",class_="form-control")}}
+    
+                    <datalist id="{{field.name}}-list">
+                        {% for name in schools %}
+                            <option value="{{name}}">
+                        {% endfor %}
+                    </datalist>
+                </div>
+            </div>
+            <p>
+                {% for error in field.errors %}
+                    {{error}}
+                {% endfor %}
+            </p>
+
+        
+        {% elif field.label.text == 'State:' %}
+            <h3>Step 2: Confirm state of selected school</h3>
+
+            <div class="mb-3">
+                {{field.label(class_="col-1 form-label")}}
+                <div class="col-2">
+                    {{field(list=field.name + "-list",class_="form-control")}}
+    
+                    <datalist id="{{field.name}}-list">
+                        {% for state in states %}
+                            <option value="{{state.name}}">
+                        {% endfor %}
+                    </datalist>
+                </div>
+
+            </div>    
+
+            <p>
+                {% for error in field.errors %}
+                    {{error}}
+                {% endfor %}
+            </p>
+
+
+        {% endif %}
+
+    {% endfor %}
+
+    <div>
+        <button class="btn btn-primary">Search</button>
+    </div>
+
+</form>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for category, message in messages %}
+      <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+{% endblock %}

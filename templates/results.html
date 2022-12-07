@@ -1,0 +1,90 @@
+{% extends 'index.html' %}
+
+{% block links %}
+<li class="nav-item">
+    <a class="nav-link" href="/search">New Search</a> <link rel="stylesheet" href="">
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="/userProfile">Edit Profile</a> <link rel="stylesheet" href="">
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="/logout">Logout</a> <link rel="stylesheet" href="">
+</li>{% endblock %}
+
+{% block content %}
+
+<div class="loader-container">
+    <div id="loader"></div>
+ 
+</div>
+<div class="loader-container">
+    <p class="loading-text">...loading</p>
+</div>
+
+<!-- single search results -->
+<div id="search" class="table-responsive">
+    <table class="table-sm table table-striped table-bordered" id="API-results">
+        <thead>
+            <tr class="table-warning">
+                <th style="width: 400px;" class="college-width">College:</th>
+                <th class="state-width">State:</th>
+                <th class="major-width">Major:</th>
+                <th style="display: none;">Degree Type:</th>
+                <th style="display: none;">Household Income:</th>
+                <th style="display: none;">Home State:</th>
+                <th class="tuitionType-width">Tuition Type:</th>
+                <th class="cost-width">Net Annual Cost:</th>
+                <th class="salary-width">Year 1 Salary:</th>
+                <th class="salary-width">Year 2 Salary:</th>
+                <th class="salary-width">Year 3 Salary:</th>
+                <th class="save-search">Search Saved</th>
+                <th style="display: none;"></th>
+            </tr>            
+        </thead>
+        <tbody class="table-group-divider">
+            <tr>
+                <td class="college-width"><input disabled class="college-width" id="school" type="text" value="{{data.school}}"></td>
+                <td class="state-width"><input disabled class="state-width" id="school-state" type="text" value="{{data.school_state}}"></td>
+                <td class="major-width"><input class="major-width" id="major" type="text" value="{{data.major}}"></td>
+                <td style="display: none;"><input id="degree" type="text" value="{{data.degree}}"></td>
+                <td style="display: none;"><input id='HH-income' type="text" value="{{data.household_income}}"></td>
+                <td style="display: none;"><input id="home-state" type="text" value="{{data.state}}"></td>
+                <td class="tuitionType-width"><input disabled class="tuitionType-width" id="tuition-type" type="text" value="{{data.tuition_type}}"></td>
+                <td class="cost-width"><input disabled class="cost-width" id="cost" type="text" value="{{data.tuition}}"></td>
+                <td class="salary-width"><input disabled class="salary-width" id="income-year1" type="text" value="{{data.yr_1_earnings}}"></td>
+                <td class="salary-width"><input disabled class="salary-width" id="income-year2" type="text" value="{{data.yr_2_earnings}}"></td>
+                <td class="salary-width"><input disabled class="salary-width" id="income-year3" type="text" value="{{data.yr_3_earnings}}"></td>
+                <td class="save-search"><label class="save-search" for="saved"><input type="checkbox" id="save_search" name="saved"></label></td>            
+                <td id="program_finance_id_placeholder" style="display: none;"></td>
+
+            </tr>
+        </tbody>
+    </table>
+    {% for field in form if field.widget.type != 'hidden' %}
+        {% for error in field.errors %}
+            {{error}}
+        {% endfor %}
+    {% endfor %}
+</div>
+
+<div id="data-notes">
+    <ul id="data-content">
+        <h5>Notes about this data:</h5>
+        <li>"No data" appears when there is insufficient data for an estimation (sample size < 30 data points)</li>
+        <li>Cost and income data is sourced only from students that received federal government student loans</li>
+        <li>For in-state public and all private schools, the total net annual cost is displayed</li>
+            <ul>
+                <li>University and goverment scholarships are subtracted from tuition </li>
+                <li>Room & board, books & supplies, and any additional fees are included</li>
+            </ul>
+        <li>For out-of-state public schools, the maximum potential cost is displayed
+            <ul>
+                <li>Tuition, Room & board, books & supplies, and any additional fees are included</li>
+                <li>Reduced costs may be possible but could not be provided by the College Scorecard API</li>
+                <li>Consult directly with the college's website to confirm if a cost reduction is possible</li>
+            </ul>
+        </li>
+        <li>Source: https://collegescorecard.ed.gov/data/documentation/</li>
+    </ul>
+</div>
+{% endblock %}

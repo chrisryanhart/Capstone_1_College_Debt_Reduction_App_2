@@ -1,0 +1,50 @@
+{% extends 'index.html'%}
+
+{% block content %}
+
+
+
+<form action="/login" method="post">
+    <h4>Enter Login Information Below</h4>
+    {{form.hidden_tag()}}
+
+    {% for field in form 
+        if field.widget.input_type != 'hidden' %}
+            <div class=" mb-3">
+                {{field.label(class_="col-3 col-form-label")}}
+                <div class="col-6">
+                    {{field(class_="form-control")}}
+                </div>
+            </div>
+
+            {% for error in field.errors %}
+                {{error}}
+            {% endfor %}
+        
+    {% endfor %}
+
+
+    <div>
+        <button class="btn btn-primary">Login</button>
+    </div>
+
+    <!-- <label for="username">Username:</label>
+    <input name="username" type="text" placeholder="Enter username">
+    <label for="password">Username:</label>
+    <input name="password" type="password" placeholder="Enter password">
+    <div>
+        <button>Submit</button>
+    </div> -->
+</form>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for category, message in messages %}
+      <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'index.html'%}
+
+{% block content %}
+
+
+
+
+
+<form action="" method="post">
+    
+    <h4>Create new User:</h4>
+
+    {{form.hidden_tag()}}
+
+    {% for field in form 
+        if field.widget.input_type != 'hidden' %}
+                <div class=" mb-3">
+                    {{field.label(class_="col-3 col-form-label")}}
+                    <div class="col-6">
+                        <!-- {{field(class_="form-control")}} -->
+                    {% if field.label.text != 'State of Residency: '%}
+                        {{field(class_="form-control")}}
+    
+                    {% elif field.label.text == 'State of Residency: '%}
+                        {{field(list=field.name + "-list",class_="form-control")}}
+                        <datalist id="{{field.name}}-list">
+                            {% for state in states %}
+                                <option value="{{state.name}}">
+                            {% endfor %}
+                        </datalist>
+                    {% endif %}
+                    </div>
+                </div>
+
+                <ul>
+                    {% for error in field.errors %}
+                        <li>{{error}}</li>
+                    {% endfor %}
+                </ul>
+
+    {% endfor %}
+    <div>
+        <button class="btn btn-primary">Create User</button>
+    </div>
+</form>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <ul class=flashes>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+
+
+
+<div id="signup-description">
+    <ul id="data-content">
+        <h5>Note:</h5>
+        <li>Household income and state of residency greatly affect total school cost</li>
+        <li>Accurate information is required for an accurate cost estimation</li>
+    </ul>
+</div>
+
+{% endblock %}
